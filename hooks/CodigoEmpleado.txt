@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+using System.Web.Mvc;
+
+/// para poder conectarme al SQL
+using System.Data;
+using System.Data.SqlClient;
+
+//otras librerias
+
+using System.Text;
+using System.Security.Cryptography;
+using System.Web.UI.WebControls;
+using AplicacionWebNominaISLinea.Models;
+using System.Configuration;
+
+
+namespace AplicacionWebNominaISLinea.Controllers
+{
+    public class AccesoController : Controller
+    {
+        //Entidad para conectarme a mi BDD y a los objetos de la misma
+        //private string cadena = "Data Source=localhost; Initial Catalog=Semana3; User ID=user_repartidor; passoword=";
+
+        //GET: Acceso
+
+        public ActionResult Autenticar()
+        {
+            return View();
+        }
+
+        //public ActionResult Error()
+        //{
+        //    return View();
+        //}
+
+        //POST
+
+        [HttpPost]
+
+        public ActionResult Autenticar( Empleado oEmpleado)
+        {
+            string mensaje ="";
+            try {
+                using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["Cnn"].ConnectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_ValidarUsuarios", cn);
+                    cmd.Parameters.AddWithValue("user", oEmpleado.correo);
+                    cmd.Parameters.AddWithValue("pass", oEmpleado.clave);
+                    cmd.Parameters.Add("id",SqlDbType.Int).Direction=ParameterDirection.Output;
+                    cmd.Parameters.Add("mensaje", SqlDbType.VarChar,100).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    oEmpleado.Id = Convert.ToInt32(cmd.Parameters["id"].Value);
+                    mensaje = cmd.Parameters["mensaje"].Value.ToString();
+
+                    cn.Close();
+                }
+
+                if (oEmpleado.Id == 0)
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+                else if (oEmpleado.Id == 1)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View();
+
+                }
+                    
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return View();
+            }
+        }
+    }
+}
+
+-------------------------------------------------------------
+
+

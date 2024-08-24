@@ -1,0 +1,82 @@
+-- Creación de la base de datos
+CREATE DATABASE Employees;
+GO
+
+USE Employees;
+GO
+
+-- Creación de la tabla 'departments'
+CREATE TABLE departments (
+    dept_no INT PRIMARY KEY,
+    dept_name VARCHAR(40) NOT NULL
+);
+GO
+
+-- Creación de la tabla 'employees'
+CREATE TABLE employees (
+    emp_no INT PRIMARY KEY,
+    birth_date DATE NOT NULL,
+    first_name VARCHAR(14) NOT NULL,
+    last_name VARCHAR(16) NOT NULL,
+    gender CHAR(1) NOT NULL,
+    hire_date DATE NOT NULL,
+    correo VARCHAR(100),
+    identification VARCHAR(20) NOT NULL
+);
+GO
+
+-- Creación de la tabla 'dept_emp'
+CREATE TABLE dept_emp (
+    emp_no INT NOT NULL,
+    dept_no INT NOT NULL,
+    from_date DATE NOT NULL,
+    to_date DATE NOT NULL,
+    PRIMARY KEY (emp_no, dept_no),
+    FOREIGN KEY (emp_no) REFERENCES employees(emp_no) ON DELETE CASCADE,
+    FOREIGN KEY (dept_no) REFERENCES departments(dept_no) ON DELETE CASCADE
+);
+GO
+
+-- Creación de la tabla 'dept_manager'
+CREATE TABLE dept_manager (
+    emp_no INT NOT NULL,
+    dept_no INT NOT NULL,
+    from_date DATE NOT NULL,
+    to_date DATE NOT NULL,
+    PRIMARY KEY (emp_no, dept_no),
+    FOREIGN KEY (emp_no) REFERENCES employees(emp_no) ON DELETE CASCADE,
+    FOREIGN KEY (dept_no) REFERENCES departments(dept_no) ON DELETE CASCADE
+);
+GO
+
+-- Creación de la tabla 'salaries'
+CREATE TABLE salaries (
+    emp_no INT NOT NULL,
+    salary INT NOT NULL,
+    from_date DATE NOT NULL,
+    to_date DATE,
+    PRIMARY KEY (emp_no, from_date),
+    FOREIGN KEY (emp_no) REFERENCES employees(emp_no) ON DELETE CASCADE
+);
+GO
+
+-- Creación de la tabla 'titles'
+CREATE TABLE titles (
+    emp_no INT NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    from_date DATE NOT NULL,
+    to_date DATE,
+    PRIMARY KEY (emp_no, title, from_date),
+    FOREIGN KEY (emp_no) REFERENCES employees(emp_no) ON DELETE CASCADE
+);
+GO
+
+-- Creación de la tabla 'users'
+CREATE TABLE users (
+    emp_no INT NOT NULL,
+    usuario VARCHAR(100) NOT NULL,
+    clave VARCHAR(200) NOT NULL,
+    PRIMARY KEY (emp_no),
+    FOREIGN KEY (emp_no) REFERENCES employees(emp_no) ON DELETE CASCADE
+);
+GO
