@@ -1,0 +1,13 @@
+<connectionStrings>
+    <add name="nombrebdd" 
+         connectionString="server= nombre del sv ;database=nombrebdd;Integrated Security=True;" 
+         providerName="System.Data.SqlClient" />
+</connectionStrings>
+
+
+ejemplo
+
+
+	<add name="Cnn" connectionString="server=DESKTOP-IHFVL90\SQLEXPRESS;database=Employees;User ID=eve;Password=eve?2004" providerName="System.Data.SqlClient" />
+
+<add name="Cnn" connectionString="server=DESKTOP-IHFVL90\SQLEXPRESS;database=Employees;Integrated Security=true" providerName="System.Data.SqlClient" />

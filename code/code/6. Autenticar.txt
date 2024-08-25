@@ -1,0 +1,125 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://marketplace.canva.com/EAFajqFWldc/1/0/1600w/canva-fondo-de-pantalla-vaca-organico-moderno-morado-wgu-11tGVb0.jpg');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .login-container {
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .social-login {
+            margin-bottom: 20px;
+        }
+
+        .social-login a img {
+            width: 30px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .input-group img {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .input-group input {
+            width: calc(100% - 30px);
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+            color: black; /* Color del texto */
+            background-color: white; /* Fondo del input */
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #9B59B6;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+        }
+
+        .register {
+            margin-top: 20px;
+        }
+
+        .register a {
+            color: #9B59B6;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+
+        <!-- Mostrar mensaje de error si hay -->
+        @if (!string.IsNullOrEmpty(ViewData["Mensaje"]))
+        {
+            <div style="color: red; margin-bottom: 10px;">
+                @ViewData["Mensaje"]
+            </div>
+        }
+
+        <div class="social-login">
+            <a href="https://www.facebook.com"><img src="https://th.bing.com/th/id/R.70ecfdd862bdc3fdbf5715085812f49e?rik=fDJPk4oWTEisvw&pid=ImgRaw&r=0" alt="Facebook"></a>
+            <a href="https://www.google.com"><img src="https://th.bing.com/th/id/R.ef61e879dfd95b455f6be430383c0418?rik=ejR2BspnXEbFzA&pid=ImgRaw&r=0" alt="Google"></a>
+            <a href="https://www.twitter.com"><img src="https://fr.tipeee.com/_static/img/socials/twitter.png" alt="Twitter"></a>
+        </div>
+
+        <form action="@Url.Action("Autenticar", "Acceso")" method="post">
+            <div class="input-group">
+                <img src="https://cdn-icons-png.flaticon.com/512/10542/10542536.png" alt="Email">
+                <input type="email" name="correo" placeholder="Correo" required>
+            </div>
+            <div class="input-group">
+                <img src="https://cdn-icons-png.flaticon.com/512/1161/1161375.png" alt="Contraseña">
+                <input type="password" name="clave" placeholder="Contraseña" required>
+            </div>
+            <button class="login-btn" type="submit">Login</button>
+        </form>
+
+        <div class="register">
+            No tienes cuenta? 
+            <a href="@Url.Action("Registrar", "Acceso")">Regístrate Aquí</a>
+        </div>
+    </div>
+</body>
+</html>
