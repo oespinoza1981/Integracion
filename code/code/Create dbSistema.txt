@@ -1,0 +1,260 @@
+Create dbSistema
+GO
+/****** Object:  Table [dbo].[Brands]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Brands](
+	[brand_id] [int] IDENTITY(1,1) NOT NULL,
+	[brand_name] [varchar](255) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[brand_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Categories]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Categories](
+	[category_id] [int] IDENTITY(1,1) NOT NULL,
+	[category_name] [varchar](255) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[category_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Customers]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Customers](
+	[customer_id] [int] IDENTITY(1,1) NOT NULL,
+	[first_name] [varchar](255) NOT NULL,
+	[last_name] [varchar](255) NOT NULL,
+	[phone] [varchar](25) NULL,
+	[email] [varchar](255) NULL,
+	[street] [varchar](255) NULL,
+	[city] [varchar](255) NULL,
+	[state] [varchar](10) NULL,
+	[zip_code] [varchar](5) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[customer_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Order_items]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Order_items](
+	[order_id] [int] NOT NULL,
+	[item_id] [int] NOT NULL,
+	[product_id] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
+	[list_price] [decimal](10, 2) NOT NULL,
+	[discount] [decimal](4, 2) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[order_id] ASC,
+	[item_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders](
+	[order_id] [int] IDENTITY(1,1) NOT NULL,
+	[customer_id] [int] NOT NULL,
+	[order_status] [tinyint] NOT NULL,
+	[order_date] [date] NOT NULL,
+	[required_date] [date] NULL,
+	[shipped_date] [date] NULL,
+	[store_id] [int] NOT NULL,
+	[staff_id] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[order_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Products]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Products](
+	[product_id] [int] IDENTITY(1,1) NOT NULL,
+	[product_name] [varchar](255) NOT NULL,
+	[brand_id] [int] NOT NULL,
+	[category_id] [int] NOT NULL,
+	[model_year] [smallint] NULL,
+	[list_price] [decimal](10, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[product_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Staffs]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Staffs](
+	[staff_id] [int] IDENTITY(1,1) NOT NULL,
+	[first_name] [varchar](50) NOT NULL,
+	[last_name] [varchar](50) NOT NULL,
+	[email] [varchar](255) NULL,
+	[phone] [varchar](25) NULL,
+	[active] [tinyint] NULL,
+	[store_id] [int] NULL,
+	[manager_id] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[staff_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Stocks]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Stocks](
+	[store_id] [int] NOT NULL,
+	[product_id] [int] NOT NULL,
+	[quantity] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[store_id] ASC,
+	[product_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Stores]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Stores](
+	[store_id] [int] IDENTITY(1,1) NOT NULL,
+	[store_name] [varchar](255) NOT NULL,
+	[phone] [varchar](25) NULL,
+	[email] [varchar](255) NULL,
+	[street] [varchar](255) NULL,
+	[city] [varchar](255) NULL,
+	[state] [varchar](10) NULL,
+	[zip_code] [varchar](5) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[store_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SystemUser]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SystemUser](
+	[id_user] [varchar](10) NOT NULL,
+	[usuario] [varchar](50) NOT NULL,
+	[pass] [varchar](10) NOT NULL,
+	[rol] [varchar](10) NOT NULL,
+	[staff_id] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id_user] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Order_items]  WITH CHECK ADD FOREIGN KEY([order_id])
+REFERENCES [dbo].[Orders] ([order_id])
+GO
+ALTER TABLE [dbo].[Order_items]  WITH CHECK ADD FOREIGN KEY([product_id])
+REFERENCES [dbo].[Products] ([product_id])
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([customer_id])
+REFERENCES [dbo].[Customers] ([customer_id])
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([staff_id])
+REFERENCES [dbo].[Staffs] ([staff_id])
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([store_id])
+REFERENCES [dbo].[Stores] ([store_id])
+GO
+ALTER TABLE [dbo].[Products]  WITH CHECK ADD FOREIGN KEY([brand_id])
+REFERENCES [dbo].[Brands] ([brand_id])
+GO
+ALTER TABLE [dbo].[Products]  WITH CHECK ADD FOREIGN KEY([category_id])
+REFERENCES [dbo].[Categories] ([category_id])
+GO
+ALTER TABLE [dbo].[Staffs]  WITH CHECK ADD FOREIGN KEY([manager_id])
+REFERENCES [dbo].[Staffs] ([staff_id])
+GO
+ALTER TABLE [dbo].[Staffs]  WITH CHECK ADD FOREIGN KEY([store_id])
+REFERENCES [dbo].[Stores] ([store_id])
+GO
+ALTER TABLE [dbo].[Stocks]  WITH CHECK ADD FOREIGN KEY([product_id])
+REFERENCES [dbo].[Products] ([product_id])
+GO
+ALTER TABLE [dbo].[Stocks]  WITH CHECK ADD FOREIGN KEY([store_id])
+REFERENCES [dbo].[Stores] ([store_id])
+GO
+ALTER TABLE [dbo].[SystemUser]  WITH CHECK ADD FOREIGN KEY([staff_id])
+REFERENCES [dbo].[Staffs] ([staff_id])
+GO
+/****** Object:  StoredProcedure [dbo].[AuthenticateUser]    Script Date: 28/07/2024 1:15:55 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[AuthenticateUser]
+    @id_user VARCHAR(10),
+    @pass VARCHAR(10)
+AS
+BEGIN
+    DECLARE @userExists INT;
+
+
+    SELECT @userExists = COUNT(*)
+    FROM SystemUser
+    WHERE id_user = @id_user AND pass = @pass;
+
+    IF @userExists > 0
+    BEGIN
+
+        PRINT 'Autenticación del usuario exitosa. Los datos del usuario son:';
+
+
+        SELECT 
+            u.id_user AS usuario,
+            CONCAT(s.first_name, ' ', s.last_name) AS nombre,
+            s.email,
+            s.phone
+        FROM SystemUser u
+        JOIN Staffs s ON u.staff_id = s.staff_id
+        WHERE u.id_user = @id_user;
+    END
+    ELSE
+    BEGIN
+
+        PRINT 'El usuario no existe en el sistema';
+    END
+END;
+GO
+USE [master]
+GO
+ALTER DATABASE [dbSistema] SET  READ_WRITE 
+GO

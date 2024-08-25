@@ -1,0 +1,102 @@
+using System;
+using System.Web.Mvc;
+using System.Data;
+using System.Data.SqlClient;
+using System.Configuration;
+using AplicacionWebNominaISLinea.Models;
+
+namespace AplicacionWebNomina.Controllers
+{
+    public class AccesoController : Controller
+    {
+        // GET: Acceso
+        public ActionResult Autenticar()
+        {
+            return View();
+        }
+
+        // POST: Autenticar
+        [HttpPost]
+        public ActionResult Autenticar(Empleado oEmpleado)
+        {
+            string mensaje = "";
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["Cnn"].ConnectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("Sp_ValidarUsuarios", cn);  
+                    cmd.Parameters.AddWithValue("user", oEmpleado.correo);
+                    cmd.Parameters.AddWithValue("pass", oEmpleado.clave);
+                    cmd.Parameters.Add("id", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("mensaje", SqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cn.Open();
+                    cmd.ExecuteNonQuery();
+
+                    oEmpleado.Id = Convert.ToInt32(cmd.Parameters["id"].Value);
+                    mensaje = cmd.Parameters["mensaje"].Value.ToString();
+
+                    cn.Close();
+                }
+
+                if (oEmpleado.Id == 0)
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+                else if (oEmpleado.Id == 1)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return View();
+            }
+        }
+
+        // POST: Empleado
+        [HttpPost]
+        public ActionResult Empleado(Usuario oUsuario)
+        {
+            int registrado = 0;
+            string mensaje;
+
+            using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["Cnn"].ConnectionString))
+            {
+                SqlCommand cmd = new SqlCommand("Sp_RegistrarUsuario", cn);  
+                cmd.Parameters.AddWithValue("cedula", oUsuario.IdUsuario);
+                cmd.Parameters.AddWithValue("nombre", oUsuario.nombre);
+                cmd.Parameters.AddWithValue("apellido", oUsuario.apellido);
+                cmd.Parameters.AddWithValue("correo", oUsuario.correo);
+                cmd.Parameters.AddWithValue("genero", oUsuario.genero);
+                cmd.Parameters.AddWithValue("fecha", oUsuario.FechaIngreso);
+                cmd.Parameters.AddWithValue("clave", oUsuario.clave);
+                cmd.Parameters.Add("Retorno", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cn.Open();
+                cmd.ExecuteNonQuery();
+                cn.Close();
+                registrado = Convert.ToInt32(cmd.Parameters["Retorno"].Value);
+                mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+            }
+
+            ViewData["Mensaje"] = mensaje;
+
+            if (registrado == 1)
+            {
+                return RedirectToAction("Autenticar", "Acceso");
+            }
+            else
+            {
+                return RedirectToAction("Registro", "Acceso");
+            }
+        }
+    }
+}
